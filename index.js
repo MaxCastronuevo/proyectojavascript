@@ -27,19 +27,6 @@ function solicitarNombre() {
           break;
         case 2:
           costoTotal += 4000;
-          productosSeleccionados.push("Pantalon")
-          console.log("Has seleccionado un pantalon.");
-          break;
-        case 3:
-          costoTotal += 9000;
-          productosSeleccionados.push("Zapatos")
-          console.log("Has seleccionado unos zapatos.");
-          break;
-        case 0:
-          console.log("Finalizando la selección de productos.");
-          break;
-        default:
-          console.log("Opción inválida.");
           break;
       }
     } while (productoSeleccionado !== 0);
