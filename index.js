@@ -1,52 +1,100 @@
-function solicitarNombre() {
-    return prompt("Por favor, ingrese su nombre:");
+let carrito = [];
+let total = 0;
+
+function agregarAlCarrito(productoId) {
+  let producto = {};
+  
+  switch (productoId) {
+    case 1:
+      producto.nombre = "Camiseta";
+      producto.precio = 3000;
+      break;
+    case 2:
+      producto.nombre = "Pantalon Jean";
+      producto.precio = 4000;
+      break;
+    case 3:
+      producto.nombre = "Zapatos";
+      producto.precio = 9000;
+      break;
+    default:
+      break;
   }
   
-    function mostrarProductos() {
-    console.log("Productos disponibles:");
-    console.log("1. Camiseta - $2000");
-    console.log("2. Pantalon - $4000");
-    console.log("3. Zapatos - $9000");
-    return parseInt(prompt("Seleccione un producto o Ingrese 0 para finalizar:"));
-  }
+  carrito.push(producto);
+  total += producto.precio;
   
-  function calcularCostoTotal() {
-    let nombreUsuario = solicitarNombre();
-    let productoSeleccionado;
-    let costoTotal = 0;
-    let productosSeleccionados = [];
-  
-    do {
-      productoSeleccionado = mostrarProductos();
-  
-      switch (productoSeleccionado) {
-        case 1:
-          costoTotal += 2000;
-          productosSeleccionados.push("Camiseta");
-          console.log("Has seleccionado una camiseta.");
-          break;
-        case 2:
-          costoTotal += 4000;
-          productosSeleccionados.push("Pantalon")
-          console.log("Has seleccionado un pantalon.");
-          break;
-        case 3:
-          costoTotal += 9000;
-          productosSeleccionados.push("Zapatos")
-          console.log("Has seleccionado unos zapatos.");
-          break;
-        case 0:
-          console.log("Finalizando la selección de productos.");
-          break;
-        default:
-          console.log("Opción inválida.");
-          break;
-      }
-    } while (productoSeleccionado !== 0);
-  
-    console.log("Productos seleccionados por " + nombreUsuario + ": " + productosSeleccionados.join(", "));
-    console.log("Costo total de los productos seleccionados por " + nombreUsuario + ": $" + costoTotal);
+  actualizarCarrito();
 }
+
+function actualizarCarrito() {
+  let carritoElement = document.getElementById("carrito");
+  let totalElement = document.getElementById("total");
   
-calcularCostoTotal();
+  carritoElement.innerHTML = "";
   
+  carrito.forEach(function (producto) {
+    let li = document.createElement("li");
+    li.textContent = producto.nombre + " - $" + producto.precio;
+    carritoElement.appendChild(li);
+  });
+  
+  totalElement.textContent = "$" + total;
+  
+  const totalConDescuento = calcularDescuento(total);
+  totalElement.textContent = "$" + totalConDescuento;
+}
+
+function vaciarCarrito() {
+  carrito = [];
+  total = 0;
+  
+  actualizarCarrito();
+}
+
+const botones = document.getElementsByClassName("producto");
+Array.from(botones).forEach(function(boton) {
+  boton.addEventListener("click", function() {
+    var productoId = parseInt(this.getAttribute("data-producto-id"));
+    agregarAlCarrito(productoId);
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  function crearEventoClick(elemento, callback) {
+    elemento.addEventListener("click", callback);
+  }
+
+  let btnProducto1 = document.getElementById("btn-producto-1");
+  crearEventoClick(btnProducto1, function() {
+    agregarAlCarrito(1);
+  });
+
+  let btnProducto2 = document.getElementById("btn-producto-2");
+  crearEventoClick(btnProducto2, function() {
+    agregarAlCarrito(2);
+  });
+
+  let btnProducto3 = document.getElementById("btn-producto-3");
+  crearEventoClick(btnProducto3, function() {
+    agregarAlCarrito(3);
+  });
+
+  let btnVaciarCarrito = document.getElementById("btn-vaciarCarrito");
+  crearEventoClick(btnVaciarCarrito, vaciarCarrito);
+});
+
+function calcularDescuento(total) {
+  const descuento = total > 25000 ? total * 0.05 : 0;
+  const totalConDescuento = total - descuento;
+  
+  const descuentoElement = document.getElementById("descuento");
+  descuentoElement.textContent = "$" + descuento.toFixed(2);
+  
+  return totalConDescuento;
+}
+
+
+
+
+
